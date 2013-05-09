@@ -1,0 +1,1 @@
+Place the HMC5883L folder in the libraries folder
