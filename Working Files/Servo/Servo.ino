@@ -55,11 +55,7 @@ void setup() {
       digitalWrite(ledPin, LOW);  // Turn LED off
       delay(250);                 // Wait 0.25 seconds
   }
-  
-  // Test to see how fast the servo goes from 0 to 180
-  myservo.write(0);
-  delay(15);
-  myservo.write(180);
+ 
 } 
  
 void loop() { 
@@ -95,36 +91,45 @@ void readMag(){
    
   // Convert radians to degrees for readability.
   int headingDegrees = heading * 180/M_PI; 
+  
   // Subtract the initial heading with our current one, seeing as the initial haeading is the direction we're facing.
-  int gameDegrees = headingDegrees + startPosition;
+  int gameDegrees = headingDegrees - startPosition;
   // If we're over 360 degrees, we're back to the start.
-  if(gameDegrees > 360){
-    gameDegrees = gameDegrees - 360;
+  if(gameDegrees < 0){
+    gameDegrees = gameDegrees + 360;
   }
+  
+  
   // Split the compass into two halfs.
-  if(gameDegrees > 180){
+ if(gameDegrees > 180){
     if(gameDegrees < 270) { // If we're less then 270, restrict it to 0 (0 being out far left value for the servo)
       gameDegrees = 0;
     } else {
       gameDegrees = gameDegrees - 270;  // If we're more then 270, convert the value so it's less then 90 (so we can use it for the servo)
     }
-  } else { // This is the other side of the compass, the right side
+ } else { // This is the other side of the compass, the right side
     if (gameDegrees > 90){
-      gameDegrees = 180;  // We're more then 90, so restrict it to 180 for the servo, since that's far right
+      gameDegrees = 170;  // We're more then 90, so restrict it to 180 for the servo, since that's far right
     } else {
-      gameDegrees = gameDegrees + 90;  // We're less then 90, so make sure the values are between 90 and 180 (right sode for the servo)
-    }
+      gameDegrees = gameDegrees + 90;  // We're less then 90, so make sure the values are between 90 and 180 (right side for the servo)
+      if(gameDegrees > 170){
+        gameDegrees = 170;  // When the servo reaches 170, it's 180 in real life. So restrict it.
+      }  
   }
+ }
+  
+  
+  
   // move the servo to the degrees ranging from and including 0 to 180
   moveServo(gameDegrees);
   // Output the data via the serial port.
-  //Output(raw, scaled, heading, headingDegrees, gameDegrees);
+  Output(raw, scaled, heading, headingDegrees, gameDegrees);
 
   // Normally we would delay the application by 66ms to allow the loop
   // to run at 15Hz (default bandwidth for the HMC5883L).
   // However since we have a long serial out (104ms at 9600) we will let
   // it run at its natural speed.
-   delay(66);
+   //delay(66);
   
 }
 
