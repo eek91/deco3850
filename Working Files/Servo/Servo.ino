@@ -63,7 +63,7 @@ void loop() {
 }
 
 void readMag(){
- // Retrive the raw values from the compass (not scaled).
+  // Retrive the raw values from the compass (not scaled).
   MagnetometerRaw raw = compass.ReadRawAxis();
   // Retrived the scaled values from the compass (scaled to the configured scale).
   MagnetometerScaled scaled = compass.ReadScaledAxis();
@@ -101,13 +101,13 @@ void readMag(){
   
   
   // Split the compass into two halfs.
- if(gameDegrees > 180){
+  if(gameDegrees > 180){
     if(gameDegrees < 270) { // If we're less then 270, restrict it to 0 (0 being out far left value for the servo)
       gameDegrees = 0;
     } else {
       gameDegrees = gameDegrees - 270;  // If we're more then 270, convert the value so it's less then 90 (so we can use it for the servo)
     }
- } else { // This is the other side of the compass, the right side
+  } else { // This is the other side of the compass, the right side
     if (gameDegrees > 90){
       gameDegrees = 170;  // We're more then 90, so restrict it to 180 for the servo, since that's far right
     } else {
@@ -115,20 +115,19 @@ void readMag(){
       if(gameDegrees > 170){
         gameDegrees = 170;  // When the servo reaches 170, it's 180 in real life. So restrict it.
       }  
+    }
   }
- }
-  
-  
   
   // move the servo to the degrees ranging from and including 0 to 180
   moveServo(gameDegrees);
   // Output the data via the serial port.
   //Output(raw, scaled, heading, headingDegrees, gameDegrees);
 
-  // Normally we would delay the application by 66ms to allow the loop
-  // to run at 15Hz (default bandwidth for the HMC5883L).
-  // However since we have a long serial out (104ms at 9600) we will let
-  // it run at its natural speed.
+  /* Normally we would delay the application by 66ms to allow the loop
+  * to run at 15Hz (default bandwidth for the HMC5883L).
+  * However since we have a long serial out (104ms at 9600) we will let
+  * it run at its natural speed.
+  */
    //delay(66);
   
 }
