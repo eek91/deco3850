@@ -123,7 +123,7 @@ void readMag(){
   // move the servo to the degrees ranging from and including 0 to 180
   moveServo(gameDegrees);
   // Output the data via the serial port.
-  Output(raw, scaled, heading, headingDegrees, gameDegrees);
+  //Output(raw, scaled, heading, headingDegrees, gameDegrees);
 
   // Normally we would delay the application by 66ms to allow the loop
   // to run at 15Hz (default bandwidth for the HMC5883L).
